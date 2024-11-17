@@ -1,0 +1,71 @@
+# General IDE and OS-specific files
+.DS_Store
+.idea/
+*.iml
+*.hprof
+
+# Build output directories
+build/
+.gradle/
+.gradle-cache/
+
+# Gradle wrapper
+.gradle/wrapper/
+gradle/wrapper/gradle-wrapper.properties
+gradlew
+gradlew.bat
+
+# Android-specific files
+*.apk
+*.ap_
+*.dex
+*.so
+*.log
+*.keystore
+local.properties
+app/build/
+androidApp/build/
+
+# iOS-specific files
+Pods/
+Podfile.lock
+xcuserdata/
+*.xcworkspace
+*.xcuserstate
+DerivedData/
+iosApp/DerivedData/
+iosApp/build/
+
+# JetBrains IDEs
+out/
+*.ipr
+*.iws
+*.swp
+
+# Kotlin/Native
+.kotlinc/
+*.klib
+*.kexe
+
+# Xcode-specific
+iosApp/xcuserdata/
+iosApp/*.xcodeproj/*
+!iosApp/*.xcodeproj/project.pbxproj
+!iosApp/*.xcodeproj/xcshareddata/
+!iosApp/*.xcodeproj/xcshareddata/WorkspaceSettings.xcsettings
+
+# Logs and databases
+*.log
+*.db
+*.sqlite
+
+# Environment variable files
+.env
+
+# Backup files
+*.bak
+*.tmp
+
+# Other specific directories
+.cocoapods/
+g
