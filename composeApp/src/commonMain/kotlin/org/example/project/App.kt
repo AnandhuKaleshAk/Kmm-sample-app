@@ -13,27 +13,25 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.navigation.compose.rememberNavController
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 import kmm_sample_project.composeapp.generated.resources.Res
 import kmm_sample_project.composeapp.generated.resources.compose_multiplatform
+import org.example.project.di.appModule
+import org.example.project.navigation.RootNavGraph
 import org.example.project.theme.MyAppTheme
+import org.koin.compose.KoinApplication
 
 @Composable
 @Preview
 fun App() {
-  MyAppTheme {
-
-      Column(modifier = Modifier.background(MaterialTheme.colors.primary).
-      fillMaxWidth().fillMaxHeight()) {
-
-          Text(
-              text = "Hello, Jetpack Compose with Custom Typography!",
-              style = MaterialTheme.typography.h5 // Use any style like h1, body1, etc.
-          )
-
-      }
-
-  }
+    KoinApplication(application = {
+        modules(appModule())
+    }) {
+        MyAppTheme {
+            RootNavGraph(rememberNavController())
+        }
+    }
 }

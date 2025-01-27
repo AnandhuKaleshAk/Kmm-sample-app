@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">Jetpack-bottom-bar</string>
+    <string name="home_title">Home</string>
+    <string name="sign_up">Sign up</string>
+    <string name="forgot_pass">Forgot password</string>
+    <string name="home">Home</string>
+    <string name="profile">Profile</string>
+    <string name="settings">Settings\n</string>
+    <string name="home_page">Home</string>
+    <string name="detail">Detail</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="username">Username</string>
+    <string name="login_title">Login</string>
+    <string name="forgot_pass_title">Forgot password?</string>
+
+</resources>
