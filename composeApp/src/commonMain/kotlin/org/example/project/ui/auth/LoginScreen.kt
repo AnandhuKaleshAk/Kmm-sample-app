@@ -47,14 +47,12 @@ import org.koin.compose.getKoin
     var showLoader by remember { mutableStateOf(false) }
 
 
-
     var isLoginClicked by remember { mutableStateOf(false) }
 
-val viewModel:LoginViewModel= getKoin().get()
+    val viewModel:LoginViewModel= getKoin().get()
 
     val loginScreenState by viewModel.loginViewState.collectAsState()
 
-//
     if(isLoginClicked){
         when(loginScreenState){
             is LoginViewModel.LoginScreenState.Loading -> {
@@ -65,7 +63,7 @@ val viewModel:LoginViewModel= getKoin().get()
             }
             is LoginViewModel.LoginScreenState.Error -> {
                 val error=loginScreenState as LoginViewModel.LoginScreenState.Error
-                showToast(error.toString())
+                showToast(error.errorMessage.toString())
                 isLoginClicked=false
                 showLoader=false
 

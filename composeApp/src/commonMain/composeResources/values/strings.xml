@@ -14,4 +14,10 @@
     <string name="login_title">Login</string>
     <string name="forgot_pass_title">Forgot password?</string>
 
+    <!-- API Response Messages -->
+    <string name="error_invalid_credentials">Invalid username or password</string>
+    <string name="error_unexpected">Unexpected error: HTTP %1$d</string>
+    <string name="error_network">Network error, please check your connection</string>
+    <string name="error_general">Something went wrong: %1$s</string>
+
 </resources>

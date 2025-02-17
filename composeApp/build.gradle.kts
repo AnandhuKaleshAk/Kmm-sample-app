@@ -39,6 +39,10 @@ kotlin {
 
 
         }
+        androidUnitTest.dependencies {
+            implementation(libs.mockk.android) // MockK for Android
+
+        }
         commonMain.dependencies {
             implementation(compose.runtime)
             implementation(compose.foundation)
@@ -51,16 +55,38 @@ kotlin {
             implementation(libs.androidx.core.splashscreen)
             implementation(libs.navigation.compose)
 
+
             //ktor bundle
             implementation(libs.bundles.ktor)
 
             //koin dependency
             implementation(libs.koin.core)
             implementation(libs.koin.compose)
+            implementation(libs.kotlinx.datetime)
+
+
+
+        }
+        commonTest.dependencies {
+            implementation(kotlin("test")) // Kotlin Test
+            implementation(libs.kotlinx.coroutines.test) // Coroutine Test
+            implementation(libs.mockk.common) // MockK for common code
+            implementation(libs.kotlin.test.common)
+            implementation(libs.kotlin.test.annotations.common)// MockK for common multiplatform
+            implementation(libs.turbine)
+
+
+            // Test helper
+
+
 
         }
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
+
+        }
+        iosTest.dependencies {
+            implementation(libs.mockk.agent) // MockK for iOS
 
         }
     }
@@ -96,6 +122,9 @@ android {
 dependencies {
     implementation(libs.androidx.material3.android)
     implementation(libs.androidx.navigation.runtime.ktx)
+    testImplementation(libs.junit.jupiter)
+    testImplementation(libs.junit.jupiter)
+    testImplementation(libs.junit.jupiter)
     debugImplementation(compose.uiTooling)
 }
 
