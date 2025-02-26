@@ -41,7 +41,8 @@ kotlin {
         }
         androidUnitTest.dependencies {
             implementation(libs.mockk.android) // MockK for Android
-
+            implementation("app.cash.turbine:turbine:1.0.0") // For Flow testing
+            implementation("junit:junit:4.13.2")
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -70,10 +71,10 @@ kotlin {
         commonTest.dependencies {
             implementation(kotlin("test")) // Kotlin Test
             implementation(libs.kotlinx.coroutines.test) // Coroutine Test
-            implementation(libs.mockk.common) // MockK for common code
-            implementation(libs.kotlin.test.common)
-            implementation(libs.kotlin.test.annotations.common)// MockK for common multiplatform
             implementation(libs.turbine)
+            implementation(libs.bundles.shared.commonTest)
+
+            implementation(libs.mockk.common)
 
 
             // Test helper
@@ -86,7 +87,6 @@ kotlin {
 
         }
         iosTest.dependencies {
-            implementation(libs.mockk.agent) // MockK for iOS
 
         }
     }

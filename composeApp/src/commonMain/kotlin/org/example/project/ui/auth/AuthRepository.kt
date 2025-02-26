@@ -11,9 +11,11 @@ class AuthRepository (private  val apiService: ApiService): BaseRepository(){
 
     suspend fun login(email:String,password:String)=safeApiCall{
         val response: HttpResponse = apiService.login(email, password)
+
         val loginResponse: LoginResponse = response.body()
         // Return the response as a pair (HttpResponse, LoginResponse)
         Pair(response, loginResponse)
     }
+
 
 }

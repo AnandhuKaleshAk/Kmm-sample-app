@@ -5,3 +5,6 @@ interface Platform {
 }
 
 expect fun getPlatform(): Platform
+
+
+expect suspend fun getPlatformString(resource: String): String

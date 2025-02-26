@@ -12,12 +12,11 @@
     import kotlinx.coroutines.flow.Flow
     import kotlinx.coroutines.flow.flow
     import kotlinx.coroutines.flow.flowOn
-    import kotlinx.serialization.decodeFromString
     import kotlinx.serialization.json.Json
     import org.jetbrains.compose.resources.getString
 
     @Suppress("UNCHECKED_CAST")
-    abstract class BaseRepository {
+    abstract class BaseRepository() {
 
         suspend fun <T> safeApiCall(
             apiCall: suspend () -> Pair<HttpResponse, T>
@@ -40,7 +39,6 @@
                     401 -> {
                         emit(ApiState.Failure(Error(getString(Res.string.error_invalid_credentials))))
                     }
-
                     else -> { // Handle Other Errors (500, etc.)
                         emit(ApiState.Failure(Error(getString(Res.string.error_unexpected)+":"+statusCode)))
                     }

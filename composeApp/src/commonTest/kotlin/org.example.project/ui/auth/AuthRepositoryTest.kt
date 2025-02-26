@@ -1,55 +1,87 @@
-package org.example.project.ui.auth
-
-
 import app.cash.turbine.test
-import io.ktor.client.call.body
-import io.ktor.client.statement.HttpResponse
-import io.ktor.client.statement.bodyAsText
+import io.ktor.client.HttpClient
+import io.ktor.client.engine.mock.MockEngine
+import io.ktor.client.engine.mock.respond
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
-import io.mockk.coEvery
-import io.mockk.every
-import org.example.project.network.ApiService
-import io.mockk.mockk
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.runBlocking
+import io.ktor.http.headersOf
+import io.ktor.serialization.kotlinx.json.json
 import kotlinx.coroutines.test.runTest
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import org.example.project.base.ApiState
 import org.example.project.base.Error
 import org.example.project.data.model.LoginResponse
-import org.example.project.utils.getOrAwaitValues
+import org.example.project.network.ApiService
+import org.example.project.ui.auth.AuthRepository
+
 import kotlin.test.Test
 import kotlin.test.assertEquals
-
+import kotlin.test.assertIs
 
 class AuthRepositoryTest {
 
-    // Mock the ApiService
-    private val mockApiService: ApiService = mockk()
+    private lateinit var mockEngine: MockEngine
+    private lateinit var httpClient: HttpClient
+    private lateinit var apiService: ApiService
+    private lateinit var authRepository: AuthRepository
 
-    // Create an instance of AuthRepository with the mocked ApiService
-    private val authRepository = AuthRepository(mockApiService)
 
     @Test
-    fun `login should return pair of http response and LoginResponse on success`() = runBlocking {
-        val email = "eve.holt@reqres.in"
-        val password = "cityslicka"
+    fun `login should return success when API returns 200`() = runTest {
+        //success login response should emit Login response
 
-        // Mock the HttpResponse and LoginResponse
-        val mockHttpResponse: HttpResponse = mockk(relaxed = true)
-        val mockLoginResponse: LoginResponse = mockk(relaxed = true)
+        val loginResponse = LoginResponse("mock_token")
+        mockEngine = MockEngine { _ ->
+            respond(
+                content = Json.encodeToString(loginResponse),  // Simulate JSON response
+                status = HttpStatusCode.OK,
+                headers = headersOf(HttpHeaders.ContentType, "application/json")
+            )
+        }
+        httpClient = HttpClient(mockEngine) {
+            install(ContentNegotiation) {
+                json(Json { ignoreUnknownKeys = true })
+            }
+        }
+        apiService = ApiService(httpClient)
+        authRepository = AuthRepository(apiService)
+        val result = authRepository.login("test@example.com", "password")
 
-        every { mockHttpResponse.status } returns HttpStatusCode.OK
-        coEvery { mockHttpResponse.body<LoginResponse>() } returns mockLoginResponse
-
-        coEvery { mockApiService.login(email, password) } returns mockHttpResponse
-
-        val results = authRepository.login(email, password).getOrAwaitValues()
-        assertEquals(
-            listOf(ApiState.Loading, ApiState.Success(mockLoginResponse)),
-            results
-        )
+        result.test {
+            assertIs<ApiState.Loading>(awaitItem()) // First, expect Loading
+            val successState = awaitItem()
+            assertIs<ApiState.Success<LoginResponse>>(successState)
+            assertEquals("mock_token", successState.data.token) // Check token
+            awaitComplete()
+        }
     }
 
+    @Test
+    fun `login should return error when API returns 400`()= runTest {
+      //mock invalid username and password
+      val  mockEngine = MockEngine { _ ->
+            respond(
+                content = """{"error": "Invalid user"}""",  // Simulate JSON response
+                status = HttpStatusCode.BadRequest,
+                headers = headersOf(HttpHeaders.ContentType, "application/json")
+            )
+        }
+        httpClient = HttpClient(mockEngine) {
+            install(ContentNegotiation) {
+                json(Json { ignoreUnknownKeys = true })
+            }
+        }
+        apiService = ApiService(httpClient)
+        authRepository = AuthRepository(apiService)
+        val result = authRepository.login("test@example.com", "password")
 
+        result.test {
+            assertEquals(ApiState.Loading, awaitItem())
+            assertEquals<ApiState<Any?>>(ApiState.Failure(Error("Invalid user")), awaitItem())
+            awaitComplete()
+        }
+
+    }
 }
-
