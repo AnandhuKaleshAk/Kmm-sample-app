@@ -25,6 +25,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import kmm_sample_project.composeapp.generated.resources.Res
@@ -128,7 +129,7 @@ import org.koin.compose.getKoin
                 end = Dimens.sdp8,
                 bottom = Dimens.sdp16
             ),
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth().testTag("loginButton")
         ) {
             Text(text = stringResource(Res.string.login_title), style = MaterialTheme.typography.h6)
         }

@@ -13,7 +13,7 @@ import org.example.project.base.doOnSuccess
 class LoginViewModel(private val authRepository: AuthRepository):ViewModel() {
 
     private val _loginViewState = MutableStateFlow<LoginScreenState>(LoginScreenState.Loading)
-    val loginViewState: StateFlow<LoginScreenState> = _loginViewState
+    var loginViewState: StateFlow<LoginScreenState> = _loginViewState
 
 
     fun login(email:String,password:String){
